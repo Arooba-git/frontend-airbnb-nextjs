@@ -28,7 +28,7 @@ export async function handleLogin(user_id: string, access_token: string, refresh
 export async function handleRefreshToken() {
     let refreshToken = await getRefreshToken();
 
-    const token = await fetch('http://localhost:8000/api/auth/token/refresh/', {
+    const token = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/auth/token/refresh/`, {
         method: 'POST',
         body: JSON.stringify(refreshToken),
         headers: {
