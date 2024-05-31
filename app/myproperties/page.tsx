@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Property from '../components/Property';
-import apiService from '../services/apiService';
 import { getUserId } from '../lib/actions';
 
 export type PropertyType = {
@@ -23,7 +22,8 @@ export default function MyProperties() {
 
     async function getProperties() {
         const userId = await getUserId();
-        const json = await apiService.get(`/api/properties/?userId=${userId}`);
+        const apiService = (await import('../services/apiService')).default
+        const json: any = await apiService.get(`/api/properties/?userId=${userId}`);
         setProperties(json.data);
     }
 

@@ -3,19 +3,20 @@
 import { useEffect, useState } from 'react';
 import Conversation from '../components/Conversation';
 import { getUserId } from '../lib/actions';
-import apiService from '../services/apiService';
 
 export default function Inbox() {
     const [conversations, setConversations] = useState([]);
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState<string | undefined>('');
 
     useEffect(() => {
         getConversations();
     }, [])
 
     async function getConversations() {
-        const userId = await getUserId();
+        const userId: string | undefined = await getUserId();
         setUserId(userId);
+
+        const apiService = (await import('../services/apiService')).default
 
         const conversations: any = await apiService.get('/api/chat/')
         console.log("conversations", conversations);

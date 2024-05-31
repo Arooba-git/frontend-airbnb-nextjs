@@ -40,18 +40,15 @@ export default function PropertyDetails({params}: {params: {id: string}}) {
 
     async function getToken() {
         const token = await getAccessToken();
-        const property: ApiResponse = await apiService.get(`/api/properties/${params.id}/`);
+        const property: any = await apiService.get(`/api/properties/${params.id}/`);
        
 
         setProperty(property.data);
 
-        const userId = await getUserId()
-
-        console.log('in property', property);
+        const userId: string| undefined = await getUserId()
         setUserId(userId);
     }
     
-    console.log('out property', property);
 
     return (
         <main className="max-w-[1500px] mx-auto px-6 pb-6">

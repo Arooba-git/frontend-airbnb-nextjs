@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import apiService from '../services/apiService';
 import { getUserId } from '../lib/actions';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -15,6 +14,7 @@ export default function MyReservation() {
 
     async function getReservations() {
         const userId = await getUserId();
+        const apiService = (await import('../services/apiService')).default
         const reservations: any = await apiService.get(`/api/auth/myreservations/`);
 
         console.log('reservation', reservations);
@@ -27,7 +27,7 @@ export default function MyReservation() {
             <h1 className="my-6 mb-4 text-2xl">My reservations</h1>
 
             {
-                reservations?.map(reservation => {
+                reservations?.map((reservation: any) => {
                     return (
                         <div className = "space-y-4" >
                             <div className="justify-content-between p-5 grid grid-cols-1 md:grid-cols-4 gap-4 shadow-md border border-gray-300 rounded-xl">

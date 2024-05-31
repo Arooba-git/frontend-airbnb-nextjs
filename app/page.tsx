@@ -7,10 +7,10 @@ import {  useSearchParams } from "next/navigation";
 import Properties from "./properties/page";
 import PropertyModal from "./components/modals/PropertyModal";
 import { getUserId } from "./lib/actions";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import SearchModal from "./components/modals/SearchModal";
 
-export default function Home() {
+function Home() {
   let params = useSearchParams();
   const selectedForm = params.get('selectedForm');
   const [userId, setUserId] = useState<string | undefined>('');
@@ -23,7 +23,6 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col px-3">
       <Properties />
-
       {selectedForm === 'login' && <LoginModal />}
       {selectedForm === 'signup' && <SignupModal />}
       {selectedForm === 'property' && <PropertyModal userId={userId} />}
@@ -31,3 +30,5 @@ export default function Home() {
     </main>
   );
 }
+
+export default Home;

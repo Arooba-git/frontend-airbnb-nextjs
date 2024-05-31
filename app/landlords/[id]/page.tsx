@@ -10,9 +10,9 @@ import { useRouter } from 'next/navigation';
 import { UserType } from '@/app/inbox/[id]/page';
 
 
-export default function LardlordDetails({params}) {
+export default function LardlordDetails({params}:any) {
     const [userId, setUserId] = useState<string | undefined>('');
-    const [landlord, setLandLord] = useState(null);
+    const [landlord, setLandLord] = useState<any>();
     const router = useRouter();
 
     useEffect(() => {
@@ -20,15 +20,15 @@ export default function LardlordDetails({params}) {
     }, [])
 
     async function getIds() {
-        const landlordLocal = await apiService.get(`/api/auth/${params.id}/`);
-        console.log('landlordLocal', landlordLocal);
+        const landlordLocal: any = await apiService.get(`/api/auth/${params.id}/`) as UserType;
+
         setLandLord(landlordLocal);
 
         const userIdLocal = await getUserId();
         setUserId(userIdLocal);
     }
 
-    async function startConversation(event: MouseEvent<HTMLDivElement, MouseEvent>): Promise<void> {
+    async function startConversation(event: any): Promise<void> {
        
         if (userId) {
             const conversation: any = await apiService.get(`/api/chat/start/${landlord?.id}/`);

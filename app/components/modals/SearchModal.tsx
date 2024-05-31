@@ -139,8 +139,8 @@ export default function SearchModal() {
         }
         </ModalBody>
         <ModalFooter>
-            <div class="w-full max-w-md">
-                <div class="flex space-x-2">
+            <div className="w-full max-w-md">
+                <div className="flex space-x-2">
             {
                 (step && step != "location") &&
                 <CustomButton label="Previous"

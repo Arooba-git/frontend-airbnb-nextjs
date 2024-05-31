@@ -58,9 +58,9 @@ export default function PropertyModal({ userId }: PropertyModalProps) {
         form.append('bedrooms', bedrooms);
         form.append('bathrooms', bathrooms);
         form.append('guests', guests);
-        form.append('country', country?.label);
-        form.append('country_code', country?.value);
-        form.append('image', image);
+        form.append('country', country?.label as string);
+        form.append('country_code', country?.value as string);
+        form.append('image', image as Blob);
 
         const bearerToken = await getAccessToken();
         const response = await apiService.post('/api/properties/create/', form, true, bearerToken);

@@ -1,5 +1,3 @@
-'user service';
-
 import { getAccessToken } from "../lib/actions";
 
 console.log("NEXTJS_API_HOST:", process.env.NEXTJS_API_HOST);

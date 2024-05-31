@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchQueryType } from '../components/modals/SearchModal';
 import { format } from 'date-fns';
 import Categories from '../components/Categories';
+
 export type PropertyType = {
     isFavorite: boolean;
     id: string,
@@ -15,7 +16,7 @@ export type PropertyType = {
     image_url: string
 }
 
-export default function Properties({landlordId} : any) {
+function Properties({landlordId} : any) {
     const [properties, setProperties] = useState<PropertyType[]>([]);
     const router = useRouter(); 
     let params = useSearchParams();
@@ -49,16 +50,16 @@ export default function Properties({landlordId} : any) {
 
     return (
         <>
-        <Categories />
+        {/* <Categories /> */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
        
         {
-            properties?.map((property) => {
-                return <Property
-                    markFavorite={(isFavorite:boolean) => markThisAsFav(property.id, isFavorite)}
-                    key={property.id}
-                    property={property}
-                />
+            properties?.map((property) => { return <></>
+                // return <Property
+                //     markFavorite={(isFavorite:boolean) => markThisAsFav(property.id, isFavorite)}
+                //     key={property.id}
+                //     property={property}
+                // />
             })
         }
         </div>
@@ -112,9 +113,10 @@ export default function Properties({landlordId} : any) {
             }
         }
 
-        const { properties, favorites }  = await apiService.get(url);
+        const apiService = (await import('../services/apiService')).default
+        const { properties, favorites }: any  = await apiService.get(url);
 
-        const propertiesWithFavoriteStatus = properties?.map(property => {
+        const propertiesWithFavoriteStatus = properties?.map((property: any) => {
             if (favorites.includes(property?.id)) {
                 property.isFavorite = true;
             } else {
@@ -124,7 +126,8 @@ export default function Properties({landlordId} : any) {
             return property;
         })
 
-
         setProperties(propertiesWithFavoriteStatus);
     }
 }
+
+export default Properties;

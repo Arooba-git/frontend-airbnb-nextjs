@@ -1,9 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import SearchFilters from './SearchFilters';
-import UserNav from './UserNav';import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
-;
+import UserNav from './UserNav';
 
 interface NavbarProps {
     userId: string | undefined

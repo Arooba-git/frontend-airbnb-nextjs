@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { SearchQueryType } from './modals/SearchModal';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Categories({dataCategory, setDataCategory}) {
+export default function Categories({dataCategory, setDataCategory}:any) {
     const [category, setCategory] = useState('');
     const router = useRouter();
     let params = useSearchParams();

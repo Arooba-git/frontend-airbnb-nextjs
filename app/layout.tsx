@@ -3,7 +3,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { getUserId } from "./lib/actions";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,18 +18,26 @@ export default function RootLayout({
 }: Readonly<{children: React.ReactNode;}>) {
   const [userId, setUserId] = useState<string | undefined>('');
 
-  getUserId().then((id) => {
-    setUserId(id);
-  })
+  useEffect(() => {
+    getUserId().then((id) => {
+      setUserId(id);
+    })
+  }, [])
+
 
   return (
     <html lang="en">
       <body className={inter.className}>
+      <Suspense >
+      
         <Navbar userId={userId} />
         <div className="pt-28 px-14">
           {children}
         </div>
+      
+      </Suspense>
       </body>
     </html>
+
   );
 }

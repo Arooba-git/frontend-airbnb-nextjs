@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Modal, ModalContent, useDisclosure, } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
 
-export default function DynamicModal({content, closeModal}) {
+export default function DynamicModal({content, closeModal}: any) {
     const router = useRouter();
     const {  onClose } = useDisclosure();
 

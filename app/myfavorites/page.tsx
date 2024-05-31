@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { getUserId } from "../lib/actions";
-import apiService from "../services/apiService";
 import { PropertyType } from "../myproperties/page";
 import Property from "../components/Property";
 
@@ -15,7 +14,8 @@ export default function MyFavorites() {
     }, [userId])
 
     async function getProperties() {
-        const { properties } = await apiService.get(`/api/properties?is_favorite=true`);
+        const apiService = (await import('../services/apiService')).default
+        const { properties }: any = await apiService.get(`/api/properties?is_favorite=true`);
         setProperties(properties);
         const userId: string | undefined = await getUserId();
 

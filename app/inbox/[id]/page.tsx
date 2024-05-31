@@ -28,7 +28,7 @@ export type MessageType = {
     conversation_id: string
 }
 
-export default function ConversationPage({params}) {
+export default function ConversationPage({params}:any) {
     const [loggedInUserId, setLoggedInUserId,] = useState<string | undefined>('');
     const [sender, setSender] = useState<any>(null);
     const [realTimeMessages, setRealTimeMessage] = useState<MessageType[]>([]);
@@ -53,7 +53,7 @@ export default function ConversationPage({params}) {
 
     useEffect(() => {
         if (lastJsonMessage && typeof lastJsonMessage === 'object' && 'name' in lastJsonMessage && 'body' in lastJsonMessage) {
-            const newMessage: MessageType = {
+            const newMessage: any = {
                 id: "",
                 name: lastJsonMessage.name as string,
                 body: lastJsonMessage.body as string,
@@ -77,10 +77,10 @@ export default function ConversationPage({params}) {
         setOldMessages(messages);
         console.log('messages', messages);
 
-        const sender = conversation.conversation?.users?.find(user => user.id == userId)
+        const sender = conversation.conversation?.users?.find((user: any) => user.id == userId)
         setSender(sender);
 
-        const otherUser: any = conversation.conversation?.users?.find(user =>  user.id != userId)
+        const otherUser: any = conversation.conversation?.users?.find((user:any) =>  user.id != userId)
         setOtherUser(otherUser);
 
         const token = await getAccessToken();
@@ -120,9 +120,11 @@ export default function ConversationPage({params}) {
         }, 50);
     }
 
+   
     function scrollToBottom() {
         if (messageDiv.current) {
-            messageDiv.current.scrollTop = messageDiv?.current.scrollHeight
+            /* @ts-ignore */
+            messageDiv.current.scrollTop = messageDiv?.current?.scrollHeight
         }
     }
 

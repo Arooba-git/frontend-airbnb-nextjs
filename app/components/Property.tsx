@@ -4,12 +4,8 @@ import { useRouter } from "next/navigation";
 import FavoriteButton from "./FavoriteButton";
 
 
-interface PropertyProps {
-    property: PropertyType,
-    markFavorite: (isFavorite:boolean) => void
-}
 
-export default function Property({ property, markFavorite }: PropertyProps) {
+export default function Property({ property, markFavorite }: any) {
     const router = useRouter();
 
     return(

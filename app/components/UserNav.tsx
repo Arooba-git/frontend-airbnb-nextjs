@@ -1,10 +1,9 @@
 'use client';
 
-import { Button } from "@nextui-org/react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { resetAuthCookies } from "../lib/actions";
+import { useSearchParams } from "next/navigation";
 
 interface UserNavProps {
     userId: string | undefined
@@ -14,9 +13,10 @@ export default function UserNav({ userId }: UserNavProps) {
     let params = useSearchParams();
     const [isOpen, setIsOpen] = useState(false);
     const selectedForm = params.get('selectedForm');
-    const router = useRouter();
+
     
     useEffect(() => {
+        //@ts-ignore//
         if (!selectedForm || (selectedForm != 'login' && selectedForm != 'signup')) {
             setIsOpen(false);
         }

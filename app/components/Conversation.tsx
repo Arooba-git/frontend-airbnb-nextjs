@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 
 
-export default function Conversation({ userId, conversation }) {
+export default function Conversation({ userId, conversation }:any) {
     const otherUser = conversation.users.find((user:any) => user.id != userId);
     const router = useRouter();
 

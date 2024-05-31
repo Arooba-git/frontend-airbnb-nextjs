@@ -21,7 +21,7 @@ export default function LoginModal() {
         }
 
         const bearerToken = await getAccessToken();
-       const response = await apiService.post('/api/auth/login/', JSON.stringify(formData), bearerToken);
+        const response = await apiService.post('/api/auth/login/', JSON.stringify(formData), false, bearerToken);
 
        if (response.access) {
            await handleLogin(response.user.pk, response.access, response.refresh);

@@ -18,7 +18,7 @@ const initialDateRange = {
 }
 
 export interface ReservationSidebarProps {
-    userId: string,
+    userId: string | undefined,
     property: Property
 }
 
@@ -62,7 +62,7 @@ export default function ReservationSidebar({ userId, property }: ReservationSide
         const reservations: any = await apiService.get(`/api/properties/${property?.id}/reservations/`);
         let dates: Date[] = [];
 
-        reservations.forEach((reservation) => {
+        reservations.forEach((reservation:any) => {
             const range = eachDayOfInterval({
                 start: new Date(reservation.start_date),
                 end: new Date(reservation.start_date),

@@ -23,7 +23,7 @@ export default function SignupModal() {
             password2
         }
 
-        const response: any = await apiService.post('/api/auth/register/', JSON.stringify(formData));
+        const response: any = await apiService.post('/api/auth/register/', JSON.stringify(formData), false, "");
         console.log("1access", response);
 
         if (response.access) {
