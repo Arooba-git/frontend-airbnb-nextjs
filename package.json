@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "[ -e .env.local ] && set -a && . ./.env.local; next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
+
   "dependencies": {
     "@nextui-org/react": "latest",
     "framer-motion": "^11.1.9",
