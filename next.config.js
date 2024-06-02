@@ -10,4 +10,17 @@ module.exports = {
     //     // !! WARN !!
     //     ignoreBuildErrors: true,
     // },
+
+
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'backend-airbnb-production.up.railway.app',
+                port: '',
+                pathname: '/media/uploads/**',
+            },
+        ],
+    },
+
 };

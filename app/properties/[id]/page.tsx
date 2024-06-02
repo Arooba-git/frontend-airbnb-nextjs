@@ -1,12 +1,12 @@
 'use client'
 
 import ReservationSidebar from '@/app/components/ReservationSidebar';
-import { getAccessToken, getUserId } from '@/app/lib/actions';
+import { getUserId } from '@/app/lib/actions';
 
 import apiService from '@/app/services/apiService';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 
 interface Landlord {
     id: string;
@@ -35,11 +35,10 @@ export default function PropertyDetails({params}: {params: {id: string}}) {
     const [userId, setUserId] = useState<string|undefined>('');
 
     useEffect(() => {
-        getToken();
+        initData();
     }, []);
 
-    async function getToken() {
-        const token = await getAccessToken();
+    async function initData() {
         const property: any = await apiService.get(`/api/properties/${params.id}/`);
        
 
@@ -57,7 +56,8 @@ export default function PropertyDetails({params}: {params: {id: string}}) {
                     fill
                     src={property?.image_url}
                     className="object-cover w-full h-full"
-                    alt="Beach house"/> 
+                    alt="Beach house"
+                    priority={true} /> 
             </div>
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-5 gap-4">

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { Suspense, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { resetAuthCookies } from "../lib/actions";
 import { useSearchParams } from "next/navigation";
 

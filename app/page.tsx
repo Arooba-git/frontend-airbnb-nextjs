@@ -7,7 +7,7 @@ import {  useSearchParams } from "next/navigation";
 import Properties from "./properties/page";
 import PropertyModal from "./components/modals/PropertyModal";
 import { getUserId } from "./lib/actions";
-import { Suspense, useState } from "react";
+import {  Suspense, useState } from "react";
 import SearchModal from "./components/modals/SearchModal";
 
 function Home() {
@@ -19,7 +19,6 @@ function Home() {
     setUserId(id);
   })
  
-
   return (
     <main className="flex min-h-screen flex-col px-3">
       <Properties />
@@ -28,6 +27,7 @@ function Home() {
       {selectedForm === 'property' && <PropertyModal userId={userId} />}
       {selectedForm === 'search' && <SearchModal />}
     </main>
+   
   );
 }
 

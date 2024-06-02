@@ -5,14 +5,14 @@ import { cookies } from "next/headers";
 export async function handleLogin(user_id: string, access_token: string, refresh_token: string) {
     cookies().set('session_user_id', user_id, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 60 * 60 * 24 * 7,
         path: '/'
     });
 
     cookies().set('session_access_token', access_token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 60 * 60 * 60,
         path: '/'
     });
@@ -41,7 +41,7 @@ export async function handleRefreshToken() {
             if (json?.access) {
                 cookies().set('session_access_token', json?.access, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
+                    secure: false,
                     maxAge: 60 * 60 * 60,
                     path: '/'
                 });

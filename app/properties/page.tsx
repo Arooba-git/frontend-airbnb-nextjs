@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import Property from '../components/Property';
 import apiService from '../services/apiService';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -49,21 +49,20 @@ function Properties({landlordId} : any) {
     }, [params])
 
     return (
-        <>
-        {/* <Categories /> */}
+<>
+        <Categories />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
        
         {
-            properties?.map((property) => { return <></>
-                // return <Property
-                //     markFavorite={(isFavorite:boolean) => markThisAsFav(property.id, isFavorite)}
-                //     key={property.id}
-                //     property={property}
-                // />
+            properties?.map((property) => { return  <Property
+                    markFavorite={(isFavorite:boolean) => markThisAsFav(property.id, isFavorite)}
+                    key={property.id}
+                    property={property}
+                />
             })
         }
         </div>
-        </>
+</>
     )
 
     async function getProperties() {

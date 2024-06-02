@@ -21,7 +21,9 @@ export default function Property({ property, markFavorite }: any) {
                     src={property?.image_url}
                     alt="beach house"
                     sizes="(max-width: 768px) 768px, (max-width: 1200px): 768px, 768px"
-                    className="hover:scale-110 object-cover transition h-full w-full" />
+                    className="hover:scale-110 object-cover transition h-full w-full" 
+                    priority={true}
+                    />
             </div>
 
             <div className="mt-2">

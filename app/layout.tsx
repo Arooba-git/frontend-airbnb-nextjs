@@ -16,26 +16,16 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
 }: Readonly<{children: React.ReactNode;}>) {
-  const [userId, setUserId] = useState<string | undefined>('');
-
-  useEffect(() => {
-    getUserId().then((id) => {
-      setUserId(id);
-    })
-  }, [])
-
-
+ 
   return (
     <html lang="en">
       <body className={inter.className}>
-      <Suspense >
-      
-        <Navbar userId={userId} />
-        <div className="pt-28 px-14">
-          {children}
-        </div>
-      
-      </Suspense>
+        <Suspense>
+          <Navbar  />
+          <div className="pt-28 px-14">
+            {children}
+          </div>
+        </Suspense>
       </body>
     </html>
 
