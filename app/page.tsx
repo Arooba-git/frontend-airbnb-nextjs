@@ -20,6 +20,7 @@ function Home() {
   })
  
   return (
+    <Suspense>
     <main className="flex min-h-screen flex-col px-3">
       <Properties />
       {selectedForm === 'login' && <LoginModal />}
@@ -27,6 +28,7 @@ function Home() {
       {selectedForm === 'property' && <PropertyModal userId={userId} />}
       {selectedForm === 'search' && <SearchModal />}
     </main>
+    </Suspense>
    
   );
 }
