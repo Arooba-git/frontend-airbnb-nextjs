@@ -5,15 +5,13 @@ import { ModalHeader, ModalBody, ModalFooter, Button,  Checkbox, Input, Link, us
 import DynamicModal from './DynamicModal';
 import CustomButton from '../CustomButton';
 import apiService from '../../services/apiService';
-import { getAccessToken, getUserId, handleLogin } from '../../lib/actions';
-import { useRouter } from 'next/navigation';
+import { getAccessToken, handleLogin } from '../../lib/actions';
 
 export default function LoginModal() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<string[]>([]);
     const [closeModal, setCloseModal] = useState(false);
-    const router = useRouter();
 
     async function submitLoginCredentials() {
         const formData = {
@@ -25,9 +23,8 @@ export default function LoginModal() {
 
        if (response.access) {
            await handleLogin(response.user.pk, response.access, response.refresh);
-           setCloseModal(true);
-           router.push(`/`);
-           
+           window.location.href="/";
+           setCloseModal(true); 
        } else {
         const errorsList: string[] = Object.values(response).map((error: any) => error);
         setErrors(errorsList);

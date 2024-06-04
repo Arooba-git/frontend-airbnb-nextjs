@@ -122,8 +122,6 @@ export default function SearchModal() {
             onChange={e => { setNumBathrooms(e.target.value) }}
         />
     </>;
-    console.log("step", step);
-
 
     const modalContent = (<>
         <ModalHeader className="flex flex-col gap-1">Search</ModalHeader>

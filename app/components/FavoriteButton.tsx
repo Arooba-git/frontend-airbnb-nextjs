@@ -13,7 +13,6 @@ export default function FavoriteButton({ id, isFavorite, markFavorite }: Favorit
         const token = await getAccessToken();
 
         const response: any = await apiService.post(`/api/properties/${id}/toggle_favorite/`, {}, false, token);
-        console.log('response', response);
 
         markFavorite(response.is_favorited)
     }

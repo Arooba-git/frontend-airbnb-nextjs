@@ -6,19 +6,19 @@ import { PropertyType } from "../myproperties/page";
 import Property from "../components/Property";
 
 export default function MyFavorites() {
-    const [properties, setProperties] = useState<PropertyType[]>([]);
+    const [myfavorites, setFavorites] = useState<PropertyType[]>([]);
     const [userId, setUserId] = useState<string | undefined>('');
     
     useEffect(() => {
-        getProperties();
+        setData();
     }, [userId])
 
-    async function getProperties() {
+    async function setData() {
         const apiService = (await import('../services/apiService')).default
-        const { properties }: any = await apiService.get(`/api/properties?is_favorite=true`);
-        setProperties(properties);
-        const userId: string | undefined = await getUserId();
+        const { favorites }: any = await apiService.get(`/api/properties?favorites=true`);
+        setFavorites(favorites);
 
+        const userId: string | undefined = await getUserId();
         setUserId(userId);
     }
 
@@ -31,12 +31,14 @@ export default function MyFavorites() {
         <h1 className="my-6 text-2xl">My Favorites</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {
-                properties?.map((property) => {
+                myfavorites.length ? (myfavorites?.map((property) => {
                     return <Property
-                        key={property.id}
+                        
                         property={property}
                     />
-                })
+                })) : (
+                    <div>You do not have any favorites</div>
+                )
             }
         </div>
     </main>

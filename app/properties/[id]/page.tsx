@@ -40,8 +40,6 @@ export default function PropertyDetails({params}: {params: {id: string}}) {
 
     async function initData() {
         const property: any = await apiService.get(`/api/properties/${params.id}/`);
-       
-
         setProperty(property.data);
 
         const userId: string| undefined = await getUserId()
@@ -56,6 +54,7 @@ export default function PropertyDetails({params}: {params: {id: string}}) {
                     fill
                     src={property?.image_url}
                     className="object-cover w-full h-full"
+                    sizes="(max-width: 768px) 768px, (max-width: 1200px): 768px, 768px"
                     alt="Beach house"
                     priority={true} /> 
             </div>

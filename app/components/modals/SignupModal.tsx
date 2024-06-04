@@ -24,15 +24,13 @@ export default function SignupModal() {
         }
 
         const response: any = await apiService.post('/api/auth/register/', JSON.stringify(formData), false, "");
-        console.log("1access", response);
 
         if (response.access) {
             await handleLogin(response.user.pk, response.access, response.refresh);
             setCloseModal(true);
-            router.push(`/`);
+            window.location.href = "/";
         } else {
             const errorsList: string[] = Object.values(response).map((error: any) => error);
-            console.log("error", errorsList);
             setErrors(errorsList);
         }
     }

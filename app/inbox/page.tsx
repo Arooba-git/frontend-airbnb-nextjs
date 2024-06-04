@@ -6,15 +6,15 @@ import { getUserId } from '../lib/actions';
 
 export default function Inbox() {
     const [conversations, setConversations] = useState([]);
-    const [userId, setUserId] = useState<string | undefined>('');
+    const [loggedInUserId, setLoggedInUserId] = useState<string | undefined>('');
 
     useEffect(() => {
         getConversations();
     }, [])
 
     async function getConversations() {
-        const userId: string | undefined = await getUserId();
-        setUserId(userId);
+        const userIdLocal: string | undefined = await getUserId();
+        setLoggedInUserId(userIdLocal);
 
         const apiService = (await import('../services/apiService')).default
 
@@ -23,7 +23,7 @@ export default function Inbox() {
         setConversations(conversations);
     }
 
-    if (!userId) {
+    if (!loggedInUserId) {
         return (<main className="max-w-[1500px] mx-auto pb-6 space-y-4">
             <p>You need to be authenticated</p>
         </main>)
@@ -33,14 +33,16 @@ export default function Inbox() {
         <main className="max-w-[1500px] mx-auto pb-6 space-y-4">
             <h1 className="my-6 text-2xl">Inbox</h1>
             {
-                conversations.length && conversations?.map((conversation: any) => {
+                conversations.length ? conversations?.map((conversation: any) => {
                     return <Conversation
                         key={conversation.id}
-                        userId={userId}
+                        loggedInUserId={loggedInUserId}
                         conversation={conversation}
                         messages={conversation.messages}
                     />
-                })
+                }) : (
+                        <div> You have no conversations</div>
+                )
             }
         </main>
     )

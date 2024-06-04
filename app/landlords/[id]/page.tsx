@@ -28,14 +28,17 @@ export default function LardlordDetails({params}:any) {
         setUserId(userIdLocal);
     }
 
-    async function startConversation(event: any): Promise<void> {
-       
-        if (userId) {
-            const conversation: any = await apiService.get(`/api/chat/start/${landlord?.id}/`);
-            router.push(`/inbox/${conversation.conversation_id}`)
-        } else {
-            router.push('/?selectedForm=login')
-        }
+    function startConversation(event: any) {
+        getUserId().then(async (loggedInUserId : any) => {
+            if (loggedInUserId) {
+                const landlordLocal: any = await apiService.get(`/api/auth/${params.id}/`) as UserType;
+                const conversation: any = await apiService.get(`/api/chat/start/${landlordLocal?.id}/`);
+                router.push(`/inbox/${conversation.conversation_id}?otherUserId=${landlordLocal.id}`)
+            } else {
+                router.push('/?selectedForm=login')
+            }
+        })
+        
     }
 
     return (
@@ -46,6 +49,7 @@ export default function LardlordDetails({params}:any) {
                         {
                             landlord?.avatar_url && <Image
                                 style={{ height:'100px', objectFit: "cover" }}
+                                
                                 src={landlord?.avatar_url}
                                 width={100}
                                 height={100}
@@ -67,7 +71,7 @@ export default function LardlordDetails({params}:any) {
                 </aside>
 
                 <div className="co-span-1 md:col-span-3 pl-0 md:pl-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-3 gap-6">
                         <Properties landlordId={landlord?.id} />
                     </div>
                 </div>

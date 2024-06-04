@@ -14,7 +14,6 @@ export type PropertyType = {
 
 export default function MyProperties() {
     const [properties, setProperties] = useState<PropertyType[]>([]);
-    
 
     useEffect(() => {
         getProperties();
@@ -32,12 +31,14 @@ export default function MyProperties() {
             <h1 className="my-6 text-2xl">My properties</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {
-                    properties?.map((property) => {
+                    properties ? (properties?.map((property) => {
                         return <Property
                             key={property.id}
                             property={property}
                         />
-                    })
+                    })) : (
+                        <div>You have not uploaded any properties</div>
+                    )
                 }
             </div>
         </main> 

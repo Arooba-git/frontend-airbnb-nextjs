@@ -2,6 +2,7 @@
 
 import { getAccessToken, getUserId } from "@/app/lib/actions";
 import apiService from "@/app/services/apiService";
+import { useSearchParams, useSelectedLayoutSegment } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { setTimeout } from "timers/promises";
@@ -29,68 +30,71 @@ export type MessageType = {
 }
 
 export default function ConversationPage({params}:any) {
-    const [loggedInUserId, setLoggedInUserId,] = useState<string | undefined>('');
-    const [sender, setSender] = useState<any>(null);
+    const [loggedInUser, setLoggedInUser] = useState<UserType>();
+
     const [realTimeMessages, setRealTimeMessage] = useState<MessageType[]>([]);
     const [otherUser, setOtherUser] = useState<any>(null);
+
     const [newMessage, setNewMessage] = useState('');
-    const [conversation, setConversation] = useState<any>('');
     const [oldMessages, setOldMessages] = useState<MessageType[]>([]);
     const [readyStateValue, setReadyStateValue] = useState<any>('');
     const [token, setToken] = useState<any>('');
     const messageDiv = useRef(null);
 
-    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`ws://127.0.0.1:8000/ws/${conversation?.id}/?token=${token ? token : null}`, {
+    let searchParams = useSearchParams();
+    const otherUserId = searchParams.get('otherUserId');
+
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`ws://127.0.0.1:8000/ws/${params?.id}/?token=${token ? token : null}`, {
         share: false,
         shouldReconnect: () => true
     })
-
-    console.log("params", params);
 
     useEffect(() => {
         fetchUserId()
     }, [])
 
     useEffect(() => {
-        if (lastJsonMessage && typeof lastJsonMessage === 'object' && 'name' in lastJsonMessage && 'body' in lastJsonMessage) {
+
+
+        if ((lastJsonMessage && typeof lastJsonMessage === 'object') && ('name' in lastJsonMessage) && ('body' in lastJsonMessage)) {
             const newMessage: any = {
                 id: "",
                 name: lastJsonMessage.name as string,
                 body: lastJsonMessage.body as string,
                 sent_to: otherUser as UserType,
-                created_by: sender as UserType,
-                conversation_id: conversation.id
+                created_by: loggedInUser as UserType,
+                conversation_id: params?.id
             }
             setRealTimeMessage((realTimeMessages) => [...realTimeMessages, newMessage]);
         }
 
-        
+        window.setTimeout(() => {
+            scrollToBottom();
+        }, 50);
+
         scrollToBottom();
     }, [lastJsonMessage])
     
     async function fetchUserId() {
-        const userId: string | undefined  = await getUserId();
-        setLoggedInUserId(userId);
+        const loggedInUserIdLocal: string | undefined  = await getUserId();
+        const loggedInUserData: UserType = await apiService.get(`/api/auth/${loggedInUserIdLocal}`) as UserType;
+        setLoggedInUser(loggedInUserData);
+
+        const otherUserData: UserType = await apiService.get(`/api/auth/${otherUserId}`) as UserType;
+        setOtherUser(otherUserData);
+
+        const { conversation, messages }: any = await apiService.get(`/api/chat/${params.id}`);
+        // for old messages
+        if (messages) {
+            setOldMessages(messages);
+        }
        
-        const { conversation: any, messages }: any = await apiService.get(`/api/chat/${params.id}`);
-        setConversation(conversation?.conversation);
-        setOldMessages(messages);
-        console.log('messages', messages);
-
-        const sender = conversation.conversation?.users?.find((user: any) => user.id == userId)
-        setSender(sender);
-
-        const otherUser: any = conversation.conversation?.users?.find((user:any) =>  user.id != userId)
-        setOtherUser(otherUser);
-
         const token = await getAccessToken();
         setToken(token);
     }
 
     async function sendMessage() {
-        console.log('otherUser', otherUser);
-        console.log('otherUser?.id', otherUser?.id);
-        if (!loggedInUserId) {
+        if (!loggedInUser) {
             console.error("You need to be authenticated");
         }
 
@@ -104,23 +108,22 @@ export default function ConversationPage({params}:any) {
             return;
         }
 
-        sendJsonMessage({
+        const messageData = {
             event: 'chat_message',
             data: {
                 body: newMessage,
-                name: sender?.name ? sender?.name : "testname",
-                send_to_id: otherUser?.id,
-                conversation_id: conversation?.id
+                receiver_id: otherUser?.id,
+                conversation_id: params?.id,
+                name: loggedInUser?.name,
             }
-        })
+        };
 
-        setNewMessage('');
-        window.setTimeout(() => {
-            scrollToBottom();
-        }, 50);
+        sendJsonMessage(messageData);
+        await setNewMessage('');
+
+        
     }
 
-   
     function scrollToBottom() {
         if (messageDiv.current) {
             /* @ts-ignore */
@@ -128,7 +131,7 @@ export default function ConversationPage({params}:any) {
         }
     }
 
-    if (!loggedInUserId) {
+    if (!loggedInUser) {
         return <main>You need to be authenticated</main>
     }
 
@@ -138,7 +141,7 @@ export default function ConversationPage({params}:any) {
                 {
                     oldMessages?.map((message: MessageType, index) => {
                         return <div key={index}
-                            className={`w-[80%] py-4 px-6 rounded-xl ${message?.name === sender?.name ? 'ml-[20%] bg-blue-200' : 'bg-gray-200'}`}>
+                            className={`w-[80%] py-4 px-6 rounded-xl ${message?.created_by.id === loggedInUser?.id ? 'ml-[20%] bg-blue-200' : 'bg-gray-200'}`}>
                             <p className="font-bold text-gray-500">{message?.created_by.name}</p>
                             <p>{message?.body}</p>
                         </div>
@@ -146,9 +149,10 @@ export default function ConversationPage({params}:any) {
                 }
                 {
                     realTimeMessages.map((message, index) => {
+
                        return <div key={index}
-                           className={`w-[80%] py-4 px-6 rounded-xl ${message?.name === sender?.name ? 'ml-[20%] bg-blue-200' : 'bg-gray-200'}`}>
-                            <p className="font-bold text-gray-500">{message?.name}</p>
+                           className={`w-[80%] py-4 px-6 rounded-xl ${message?.created_by?.id === loggedInUser?.id ? 'ml-[20%] bg-blue-200' : 'bg-gray-200'}`}>
+                           <p className="font-bold text-gray-500">{message?.created_by.name}</p>
                             <p>{message?.body}</p>
                         </div>
                     })
@@ -158,6 +162,7 @@ export default function ConversationPage({params}:any) {
             <div className="rounded-xl mt-4 py-4 px-6 flex border border-gray-300 space-x-4">
                 <input type="text" placeholder="Type your message..."
                     className="w-full p-5 bg-gray-200 rounded-xl"
+                    value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}>
                 </input>
 

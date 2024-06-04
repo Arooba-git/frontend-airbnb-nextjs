@@ -2,7 +2,6 @@
 
 import {  useEffect, useState } from 'react';
 import Property from '../components/Property';
-import apiService from '../services/apiService';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SearchQueryType } from '../components/modals/SearchModal';
 import { format } from 'date-fns';
@@ -49,10 +48,9 @@ function Properties({landlordId} : any) {
     }, [params])
 
     return (
-<>
+    <div>
         <Categories />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-       
+        <div className="grid grid-cols-2 gap-6">
         {
             properties?.map((property) => { return  <Property
                     markFavorite={(isFavorite:boolean) => markThisAsFav(property.id, isFavorite)}
@@ -62,7 +60,7 @@ function Properties({landlordId} : any) {
             })
         }
         </div>
-</>
+    </div>
     )
 
     async function getProperties() {
@@ -71,12 +69,12 @@ function Properties({landlordId} : any) {
         if (landlordId) {
             url += `?landlord_id=${landlordId}`;
         } else {
+            let apiURL = '&favorites=true';
+
             if (searchData) {
                 const searchQuery: SearchQueryType = JSON.parse(searchData);
                 const { country, checkin, checkout, guests, bathrooms, bedrooms, category } = searchQuery;
             
-                let apiURL = '';
-
                 if (country) {
                     apiURL += `&country=${country}`;
                 }
@@ -104,11 +102,11 @@ function Properties({landlordId} : any) {
                 if (bedrooms) {
                     apiURL += `&numBedrooms=${bedrooms}`;
                 }
+            }
 
-                if (apiURL) {
-                    apiURL = `?` + apiURL.substring(1);
-                    url += apiURL;
-                }
+            if (apiURL) {
+                apiURL = `?` + apiURL.substring(1);
+                url += apiURL;
             }
         }
 
@@ -116,14 +114,18 @@ function Properties({landlordId} : any) {
         const { properties, favorites }: any  = await apiService.get(url);
 
         const propertiesWithFavoriteStatus = properties?.map((property: any) => {
-            if (favorites.includes(property?.id)) {
+            if (favorites.find((favoriteProperty :any) => {
+               
+                return favoriteProperty.id === property?.id
+            })) {
+                
                 property.isFavorite = true;
             } else {
                 property.isFavorite = false;
             }
 
             return property;
-        })
+        });
 
         setProperties(propertiesWithFavoriteStatus);
     }

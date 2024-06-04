@@ -11,10 +11,12 @@ interface NavbarProps {
 
 export default function NavBar()  {
     const [userId, setUserId] = useState<string | undefined>('');
-    getUserId().then((id) => {
-        setUserId(id);
-    })
-
+    useEffect(() => {
+        getUserId().then((id) => {
+            setUserId(id);
+        })
+    }, [])
+    
     
     return <nav className="w-full fixed top-0 left-0 border-b bg-white z-10">
         <div className="mx-auto">

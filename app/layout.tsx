@@ -3,8 +3,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
-import { Suspense, useEffect, useState } from "react";
-import { getUserId } from "./lib/actions";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +27,5 @@ export default function RootLayout({
         </Suspense>
       </body>
     </html>
-
   );
 }

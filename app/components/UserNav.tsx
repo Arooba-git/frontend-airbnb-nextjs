@@ -25,6 +25,7 @@ export default function UserNav({ userId }: UserNavProps) {
 
     function submitLogout() {
         resetAuthCookies();
+        window.location.href = "/";
     }
 
     return (

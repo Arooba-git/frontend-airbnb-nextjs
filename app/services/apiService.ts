@@ -1,7 +1,5 @@
 import { getAccessToken } from "../lib/actions";
 
-console.log("NEXTJS_API_HOST:", process.env.NEXTJS_API_HOST);
-
 const apiService = {
     get: async function(url: string) {
         const bearerToken = await getAccessToken();
@@ -13,8 +11,6 @@ const apiService = {
         if (bearerToken) {
             headers = { ...headers, 'Authorization': `Bearer ${bearerToken}` }
         }
-
-        console.log('headers', headers);
 
         return new Promise((resolve, reject) => {
             fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`, {
@@ -44,7 +40,6 @@ const apiService = {
             headers = {...headers, 'Authorization': `Bearer ${token}`}
         }
 
-        console.log('headers', headers);
         return new Promise((resolve, reject) => {
             fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`, {
                 headers: headers,
@@ -52,7 +47,6 @@ const apiService = {
                 body: data
             })
                 .then((response) => {
-                    console.log('init response', response);
                     return response.json();
                 })
                 .then((json) => {

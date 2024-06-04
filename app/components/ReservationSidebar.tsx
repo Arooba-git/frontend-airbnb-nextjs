@@ -76,7 +76,6 @@ export default function ReservationSidebar({ userId, property }: ReservationSide
 
     async function performBooking() {
         if (userId) {
-            console.log('dateRange', dateRange);
             if (dateRange.startDate && dateRange.endDate) {
                 const form = new FormData();
                 form.append('guests', guests);

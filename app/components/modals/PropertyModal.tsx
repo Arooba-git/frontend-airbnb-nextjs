@@ -10,13 +10,13 @@ import { SelectCountryType, getCountries } from '../../components/Countries';
 import Select from 'react-select';
 import Image from 'next/image';
 import apiService from '@/app/services/apiService';
-import { getAccessToken } from '@/app/lib/actions';
+import { getAccessToken, getUserId } from '@/app/lib/actions';
 
 interface PropertyModalProps {
     userId: string | undefined
 }
 
-export default function PropertyModal({ userId }: PropertyModalProps) {
+export default function PropertyModal() {
     const [dataCategory, setDataCategory] = useState('');
     const [closeModal, setCloseModal] = useState(false);
     const [step, setStep] = useState(1);
@@ -32,9 +32,11 @@ export default function PropertyModal({ userId }: PropertyModalProps) {
     const router = useRouter();
 
     useEffect(() => {
-        if (!userId) {
-            router.push('/?selectedForm=login');
-        }
+        getUserId().then((userId) => {
+            if (!userId) {
+                router.push('/?selectedForm=login');
+            }
+        });
     }, []);
     
     function setCategory(category:  string) {
