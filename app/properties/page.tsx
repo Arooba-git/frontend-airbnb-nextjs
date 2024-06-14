@@ -114,7 +114,7 @@ function Properties({landlordId} : any) {
         const { properties, favorites }: any  = await apiService.get(url);
 
         const propertiesWithFavoriteStatus = properties?.map((property: any) => {
-            if (favorites.find((favoriteProperty :any) => {
+            if (favorites?.find((favoriteProperty :any) => {
                
                 return favoriteProperty.id === property?.id
             })) {
@@ -127,7 +127,9 @@ function Properties({landlordId} : any) {
             return property;
         });
 
-        setProperties(propertiesWithFavoriteStatus);
+        if (propertiesWithFavoriteStatus.length) {
+            setProperties(propertiesWithFavoriteStatus);
+        }
     }
 }
 
