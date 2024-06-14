@@ -13,6 +13,7 @@ module.exports = {
 
 
     images: {
+        domains: ['backend-airbnb-production.up.railway.app'],
         remotePatterns: [
             {
                 protocol: 'https',

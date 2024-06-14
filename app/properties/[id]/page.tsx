@@ -42,7 +42,7 @@ export default function PropertyDetails({params}: {params: {id: string}}) {
         const property: any = await apiService.get(`/api/properties/${params.id}/`);
         setProperty(property.data);
 
-        const userId: string| undefined = await getUserId()
+        const userId: string| undefined = await getUserId();
         setUserId(userId);
     }
     
